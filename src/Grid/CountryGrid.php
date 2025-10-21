@@ -41,21 +41,6 @@ final class CountryGrid extends AbstractGrid
                     ->setSortable(true)
             )
             ->addField(
-                StringField::create('iso2')
-                    ->setLabel('Iso2')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('numeric_code')
-                    ->setLabel('Numeric_code')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('phonecode')
-                    ->setLabel('Phonecode')
-                    ->setSortable(true)
-            )
-            ->addField(
                 StringField::create('capital')
                     ->setLabel('Capital')
                     ->setSortable(true)
@@ -63,36 +48,6 @@ final class CountryGrid extends AbstractGrid
             ->addField(
                 StringField::create('currency')
                     ->setLabel('Currency')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('currency_name')
-                    ->setLabel('Currency_name')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('currency_symbol')
-                    ->setLabel('Currency_symbol')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('tld')
-                    ->setLabel('Tld')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('native')
-                    ->setLabel('Native')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('population')
-                    ->setLabel('Population')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('gdp')
-                    ->setLabel('Gdp')
                     ->setSortable(true)
             )
             ->addField(
@@ -106,16 +61,6 @@ final class CountryGrid extends AbstractGrid
                     ->setSortable(true)
             )
             ->addField(
-                StringField::create('nationality')
-                    ->setLabel('Nationality')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('timezones')
-                    ->setLabel('Timezones')
-                    ->setSortable(true)
-            )
-            ->addField(
                 StringField::create('latitude')
                     ->setLabel('Latitude')
                     ->setSortable(true)
@@ -123,16 +68,6 @@ final class CountryGrid extends AbstractGrid
             ->addField(
                 StringField::create('longitude')
                     ->setLabel('Longitude')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('emoji')
-                    ->setLabel('Emoji')
-                    ->setSortable(true)
-            )
-            ->addField(
-                StringField::create('emojiU')
-                    ->setLabel('EmojiU')
                     ->setSortable(true)
             )
             ->addField(

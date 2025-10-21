@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\City;
 use App\Entity\Country;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,19 +18,17 @@ class CityType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('state_id')
-            ->add('state_code')
-            ->add('state_name')
-            ->add('country_code')
-            ->add('country_name')
             ->add('latitude')
             ->add('longitude')
             ->add('native')
-            ->add('timezone')
+            ->add('timezone', TimezoneType::class, [
+                'preferred_choices' => ['Europe/Paris', 'UTC'],
+            ])
             ->add('wikiDataId')
             ->add('country_id', EntityType::class, [
                 'class' => Country::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
+                'label' => 'app.ui.country',
             ])
         ;
     }

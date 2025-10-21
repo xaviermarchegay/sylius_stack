@@ -96,8 +96,8 @@ class Country implements ResourceInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nationality = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $timezones = null;
+    #[ORM\Column(type: Types::JSONB, nullable: true)]
+    private ?array $timezones = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $latitude = null;
@@ -346,12 +346,12 @@ class Country implements ResourceInterface
         return $this;
     }
 
-    public function getTimezones(): ?string
+    public function getTimezones(): ?array
     {
         return $this->timezones;
     }
 
-    public function setTimezones(?string $timezones): static
+    public function setTimezones(?array $timezones): static
     {
         $this->timezones = $timezones;
 

@@ -120,7 +120,7 @@ class ImportDataCommand
                 $country->setSubregionId($this->subRegionRepository->find((int) $record['subregion_id']));
             }
             $country->setNationality($record['nationality']);
-            $country->setTimezones($record['timezones']);
+            $country->setTimezones($this->convertCustomStringToArray($record['timezones']));
             $country->setLatitude($record['latitude']);
             $country->setLongitude($record['longitude']);
             $country->setEmoji($record['emoji']);
@@ -143,7 +143,7 @@ class ImportDataCommand
 
         foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
             $city = $this->cityRepository->find((int) $record['id']);
-            if (!$city instanceof \App\Entity\City) {
+            if (!$city instanceof City) {
                 $city = new City();
                 $this->manager->persist($city);
             }
@@ -172,5 +172,44 @@ class ImportDataCommand
 
 
         return Command::SUCCESS;
+    }
+
+    private function convertCustomStringToArray(string $str): array
+    {
+        $result = [];
+
+        // Remove the outer brackets
+        $str = trim($str, '[]');
+
+        // Split objects by '},{' but keep inner content intact
+        $objects = preg_split('/\},\s*\{/', $str);
+
+        foreach ($objects as $obj) {
+            // Add braces back
+            $obj = '{' . trim($obj, '{}') . '}';
+
+            // Match key:value pairs
+            preg_match_all('/(\w+):([^\s,}]+)/', $obj, $matches, PREG_SET_ORDER);
+
+            $assoc = [];
+            foreach ($matches as $match) {
+                $key = $match[1];
+                $value = $match[2];
+
+                // Remove single or double quotes from string values
+                $value = trim($value, '\'"');
+
+                // Convert numeric strings to int
+                if (is_numeric($value)) {
+                    $value = 0 + $value;
+                }
+
+                $assoc[$key] = $value;
+            }
+
+            $result[] = $assoc;
+        }
+
+        return $result;
     }
 }
