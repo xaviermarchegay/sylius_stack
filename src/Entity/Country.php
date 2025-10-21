@@ -1,15 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Form\CountryType;
+use App\Grid\CountryGrid;
 use App\Repository\CountryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 
+#[AsResource(
+    section: 'admin',
+    formType: CountryType::class,
+    templatesDir: '@SyliusAdminUi/crud',
+    routePrefix: '/admin',
+    operations: [
+        new Index(grid: CountryGrid::class),
+        new Create(),
+        new Update(),
+        new Show(),
+        new Delete(),
+        new BulkDelete(),
+    ],
+)]
 #[ORM\Entity(repositoryClass: CountryRepository::class)]
-class Country
+class Country implements ResourceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

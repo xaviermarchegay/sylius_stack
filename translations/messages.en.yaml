@@ -1,0 +1,11 @@
+app:
+  ui:
+    world: 'World'
+    region: 'Region'
+    regions: 'Regions'
+    sub_region: 'Sub Region'
+    sub_regions: 'Sub Regions'
+    country: 'Country'
+    countries: 'Countries'
+    city: 'City'
+    cities: 'Cities'

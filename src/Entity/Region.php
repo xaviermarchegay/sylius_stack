@@ -1,14 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
+use App\Form\RegionType;
+use App\Grid\RegionGrid;
 use App\Repository\RegionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Resource\Model\ResourceInterface;
+use Sylius\Resource\Metadata\AsResource;
+use Sylius\Resource\Metadata\BulkDelete;
+use Sylius\Resource\Metadata\Create;
+use Sylius\Resource\Metadata\Delete;
+use Sylius\Resource\Metadata\Index;
+use Sylius\Resource\Metadata\Show;
+use Sylius\Resource\Metadata\Update;
 
+#[AsResource(
+    section: 'admin',
+    formType: RegionType::class,
+    templatesDir: '@SyliusAdminUi/crud',
+    routePrefix: '/admin',
+    operations: [
+        new Index(grid: RegionGrid::class),
+        new Create(),
+        new Update(),
+        new Show(),
+        new Delete(),
+        new BulkDelete(),
+    ],
+)]
 #[ORM\Entity(repositoryClass: RegionRepository::class)]
-class Region
+class Region implements ResourceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
