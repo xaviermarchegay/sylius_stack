@@ -1,0 +1,15 @@
+imports:
+    - { resource: '@SyliusBootstrapAdminUiBundle/config/app.php' }
+
+sylius_twig_hooks:
+    hooks:
+        # ...
+        # Disabling Symfony UX stylesheets
+        'sylius_admin.base#stylesheets':
+            symfony_ux:
+                enabled: false
+
+        # Disabling Stimulus App
+        'sylius_admin.base#javascripts':
+            symfony_ux:
+                enabled: false
