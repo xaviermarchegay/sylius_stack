@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\City;
+use App\Entity\Country;
 use App\Entity\Region;
 use App\Entity\SubRegion;
+use App\Repository\CityRepository;
+use App\Repository\CountryRepository;
 use App\Repository\RegionRepository;
 use App\Repository\SubRegionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Csv\Reader;
-use League\Csv\Statement;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -24,9 +27,10 @@ class ImportDataCommand
     public function __construct(
         private readonly RegionRepository $regionRepository,
         private readonly SubRegionRepository $subRegionRepository,
+        private readonly CountryRepository $countryRepository,
+        private readonly CityRepository $cityRepository,
         private readonly EntityManagerInterface $manager,
-    )
-    {
+    ) {
     }
 
     public function __invoke(SymfonyStyle $io): int
@@ -69,8 +73,96 @@ class ImportDataCommand
             }
 
             $subregion->setName($record['name']);
-            $subregion->setRegionId($this->regionRepository->find((int) $record['region_id']));
+            if ($record['region_id'] !== '') {
+                $subregion->setRegionId($this->regionRepository->find((int) $record['region_id']));
+            }
             $subregion->setWikiDataId($record['wikiDataId']);
+            $io->progressAdvance();
+        }
+
+        $this->manager->flush();
+        $this->manager->clear();
+        $io->progressFinish();
+
+        // Countries
+        $csv = Reader::from(__DIR__ . '/../../data/countries.csv');
+        $csv->setHeaderOffset(0);
+
+        $io->title('Importing Countries');
+        $io->progressStart(count($csv));
+
+        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+            $country = $this->countryRepository->find((int) $record['id']);
+            if (!$country) {
+                $country = new Country();
+                $this->manager->persist($country);
+            }
+
+            $country->setName($record['name']);
+            $country->setIso3($record['iso3']);
+            $country->setIso2($record['iso2']);
+            $country->setNumericCode($record['numeric_code']);
+            $country->setPhonecode($record['phonecode']);
+            $country->setCapital($record['capital']);
+            $country->setCurrency($record['currency']);
+            $country->setCurrencyName($record['currency_name']);
+            $country->setCurrencySymbol($record['currency_symbol']);
+            $country->setTld($record['tld']);
+            $country->setNative($record['native']);
+            $country->setPopulation($record['population']);
+            $country->setGdp($record['gdp']);
+            $country->setRegion($record['region']);
+            if ($record['region_id'] !== '') {
+                $country->setRegionId($this->regionRepository->find((int) $record['region_id']));
+            }
+            $country->setSubregion($record['subregion']);
+            if ($record['subregion_id'] !== '') {
+                $country->setSubregionId($this->subRegionRepository->find((int) $record['subregion_id']));
+            }
+            $country->setNationality($record['nationality']);
+            $country->setTimezones($record['timezones']);
+            $country->setLatitude($record['latitude']);
+            $country->setLongitude($record['longitude']);
+            $country->setEmoji($record['emoji']);
+            $country->setEmojiU($record['emojiU']);
+            $country->setWikiDataId($record['wikiDataId']);
+
+            $io->progressAdvance();
+        }
+
+        $this->manager->flush();
+        $this->manager->clear();
+        $io->progressFinish();
+
+        // Cities
+        $csv = Reader::from(__DIR__ . '/../../data/cities.csv');
+        $csv->setHeaderOffset(0);
+
+        $io->title('Importing Cities');
+        $io->progressStart(count($csv));
+
+        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+            $city = $this->cityRepository->find((int) $record['id']);
+            if (!$city) {
+                $city = new City();
+                $this->manager->persist($city);
+            }
+
+            $city->setName($record['name']);
+            $city->setStateId($record['state_id']);
+            $city->setStateCode($record['state_code']);
+            $city->setStateName($record['state_name']);
+            if ($record['country_id'] !== '') {
+                $city->setCountryId($this->countryRepository->find((int) $record['country_id']));
+            }
+            $city->setCountryCode($record['country_code']);
+            $city->setCountryName($record['country_name']);
+            $city->setLatitude($record['latitude']);
+            $city->setLongitude($record['longitude']);
+            $city->setNative($record['native']);
+            $city->setTimezone($record['timezone']);
+            $city->setWikiDataId($record['wikiDataId']);
+
             $io->progressAdvance();
         }
 
