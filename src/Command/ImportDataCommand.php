@@ -1,48 +1,83 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
+use App\Entity\Region;
+use App\Entity\SubRegion;
+use App\Repository\RegionRepository;
+use App\Repository\SubRegionRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use League\Csv\Reader;
+use League\Csv\Statement;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:import-data',
-    description: 'Add a short description for your command',
+    description: 'Import a lot of sample data',
 )]
-class ImportDataCommand extends Command
+class ImportDataCommand
 {
-    public function __construct()
+    public function __construct(
+        private readonly RegionRepository $regionRepository,
+        private readonly SubRegionRepository $subRegionRepository,
+        private readonly EntityManagerInterface $manager,
+    )
     {
-        parent::__construct();
     }
 
-    protected function configure(): void
+    public function __invoke(SymfonyStyle $io): int
     {
-        $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
-    }
+        // Regions
+        $csv = Reader::from(__DIR__ . '/../../data/regions.csv');
+        $csv->setHeaderOffset(0);
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
+        $io->title('Importing Regions');
+        $io->progressStart($csv->count());
 
-        if ($arg1) {
-            $io->note(sprintf('You passed an argument: %s', $arg1));
+        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+            $region = $this->regionRepository->find((int) $record['id']);
+            if (!$region) {
+                $region = new Region();
+                $this->manager->persist($region);
+            }
+
+            $region->setName($record['name']);
+            $region->setWikiDataId($record['wikiDataId']);
+            $io->progressAdvance();
         }
 
-        if ($input->getOption('option1')) {
-            // ...
+        $this->manager->flush();
+        $this->manager->clear();
+        $io->progressFinish();
+
+        // Subregions
+        $csv = Reader::from(__DIR__ . '/../../data/subregions.csv');
+        $csv->setHeaderOffset(0);
+
+        $io->title('Importing SubRegions');
+        $io->progressStart($csv->count());
+
+        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+            $subregion = $this->subRegionRepository->find((int) $record['id']);
+            if (!$subregion) {
+                $subregion = new SubRegion();
+                $this->manager->persist($subregion);
+            }
+
+            $subregion->setName($record['name']);
+            $subregion->setRegionId($this->regionRepository->find((int) $record['region_id']));
+            $subregion->setWikiDataId($record['wikiDataId']);
+            $io->progressAdvance();
         }
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $this->manager->flush();
+        $this->manager->clear();
+        $io->progressFinish();
+
 
         return Command::SUCCESS;
     }

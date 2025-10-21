@@ -10,6 +10,7 @@
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.5",
         "doctrine/orm": "^3.5",
+        "league/csv": "^9.27.0",
         "pagerfanta/doctrine-orm-adapter": "^4.7",
         "sylius/bootstrap-admin-ui": "^0.9.1",
         "sylius/ui-translations": "^0.9.1",
