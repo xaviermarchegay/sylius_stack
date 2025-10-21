@@ -62,6 +62,11 @@ class SubRegion implements ResourceInterface
         $this->countries = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->name ?? '';
+    }
+
     public function getId(): ?int
     {
         return $this->id;

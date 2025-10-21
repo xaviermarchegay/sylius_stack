@@ -2,6 +2,7 @@
 
 namespace App\Grid;
 
+use App\Entity\Region;
 use App\Entity\SubRegion;
 use Sylius\Bundle\GridBundle\Builder\Action\CreateAction;
 use Sylius\Bundle\GridBundle\Builder\Action\DeleteAction;
@@ -11,6 +12,9 @@ use Sylius\Bundle\GridBundle\Builder\ActionGroup\BulkActionGroup;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\ItemActionGroup;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\MainActionGroup;
 use Sylius\Bundle\GridBundle\Builder\Field\StringField;
+use Sylius\Bundle\GridBundle\Builder\Filter\EntityFilter;
+use Sylius\Bundle\GridBundle\Builder\Filter\SelectFilter;
+use Sylius\Bundle\GridBundle\Builder\Filter\StringFilter;
 use Sylius\Bundle\GridBundle\Builder\GridBuilderInterface;
 use Sylius\Bundle\GridBundle\Grid\AbstractGrid;
 use Sylius\Component\Grid\Attribute\AsGrid;
@@ -56,6 +60,10 @@ final class SubRegionGrid extends AbstractGrid
                 BulkActionGroup::create(
                     DeleteAction::create()
                 )
+            )
+            ->addFilter(
+                EntityFilter::create('region_id', Region::class)
+                    ->setLabel('app.ui.region')
             )
         ;
     }
