@@ -13,6 +13,7 @@ use Sylius\Bundle\ResourceBundle\Doctrine\ORM\CreatePaginatorTrait;
 class CountryRepository extends ServiceEntityRepository
 {
     use CreatePaginatorTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Country::class);

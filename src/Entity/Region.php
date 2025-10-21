@@ -34,7 +34,7 @@ use Sylius\Resource\Metadata\Update;
     ],
 )]
 #[ORM\Entity(repositoryClass: RegionRepository::class)]
-class Region implements ResourceInterface
+class Region implements ResourceInterface, \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -65,7 +65,7 @@ class Region implements ResourceInterface
         $this->countries = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name ?? '';
     }

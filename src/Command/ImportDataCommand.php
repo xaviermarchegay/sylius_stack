@@ -36,15 +36,15 @@ class ImportDataCommand
     public function __invoke(SymfonyStyle $io): int
     {
         // Regions
-        $csv = Reader::from(__DIR__ . '/../../data/regions.csv');
+        $csv = Reader::from(__DIR__.'/../../data/regions.csv');
         $csv->setHeaderOffset(0);
 
         $io->title('Importing Regions');
         $io->progressStart($csv->count());
 
-        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+        foreach ($csv->sorted(fn ($a, $b) => (int) $a['id'] <=> (int) $b['id'])->getRecords() as $record) {
             $region = $this->regionRepository->find((int) $record['id']);
-            if (!$region instanceof \App\Entity\Region) {
+            if (!$region instanceof Region) {
                 $region = new Region();
                 $this->manager->persist($region);
             }
@@ -59,21 +59,21 @@ class ImportDataCommand
         $io->progressFinish();
 
         // Subregions
-        $csv = Reader::from(__DIR__ . '/../../data/subregions.csv');
+        $csv = Reader::from(__DIR__.'/../../data/subregions.csv');
         $csv->setHeaderOffset(0);
 
         $io->title('Importing SubRegions');
         $io->progressStart($csv->count());
 
-        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+        foreach ($csv->sorted(fn ($a, $b) => (int) $a['id'] <=> (int) $b['id'])->getRecords() as $record) {
             $subregion = $this->subRegionRepository->find((int) $record['id']);
-            if (!$subregion instanceof \App\Entity\SubRegion) {
+            if (!$subregion instanceof SubRegion) {
                 $subregion = new SubRegion();
                 $this->manager->persist($subregion);
             }
 
             $subregion->setName($record['name']);
-            if ($record['region_id'] !== '') {
+            if ('' !== $record['region_id']) {
                 $subregion->setRegionId($this->regionRepository->find((int) $record['region_id']));
             }
             $subregion->setWikiDataId($record['wikiDataId']);
@@ -85,15 +85,15 @@ class ImportDataCommand
         $io->progressFinish();
 
         // Countries
-        $csv = Reader::from(__DIR__ . '/../../data/countries.csv');
+        $csv = Reader::from(__DIR__.'/../../data/countries.csv');
         $csv->setHeaderOffset(0);
 
         $io->title('Importing Countries');
-        $io->progressStart(count($csv));
+        $io->progressStart(\count($csv));
 
-        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+        foreach ($csv->sorted(fn ($a, $b) => (int) $a['id'] <=> (int) $b['id'])->getRecords() as $record) {
             $country = $this->countryRepository->find((int) $record['id']);
-            if (!$country instanceof \App\Entity\Country) {
+            if (!$country instanceof Country) {
                 $country = new Country();
                 $this->manager->persist($country);
             }
@@ -112,11 +112,11 @@ class ImportDataCommand
             $country->setPopulation($record['population']);
             $country->setGdp($record['gdp']);
             $country->setRegion($record['region']);
-            if ($record['region_id'] !== '') {
+            if ('' !== $record['region_id']) {
                 $country->setRegionId($this->regionRepository->find((int) $record['region_id']));
             }
             $country->setSubregion($record['subregion']);
-            if ($record['subregion_id'] !== '') {
+            if ('' !== $record['subregion_id']) {
                 $country->setSubregionId($this->subRegionRepository->find((int) $record['subregion_id']));
             }
             $country->setNationality($record['nationality']);
@@ -135,13 +135,13 @@ class ImportDataCommand
         $io->progressFinish();
 
         // Cities
-        $csv = Reader::from(__DIR__ . '/../../data/cities.csv');
+        $csv = Reader::from(__DIR__.'/../../data/cities.csv');
         $csv->setHeaderOffset(0);
 
         $io->title('Importing Cities');
-        $io->progressStart(count($csv));
+        $io->progressStart(\count($csv));
 
-        foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
+        foreach ($csv->sorted(fn ($a, $b) => (int) $a['id'] <=> (int) $b['id'])->getRecords() as $record) {
             $city = $this->cityRepository->find((int) $record['id']);
             if (!$city instanceof City) {
                 $city = new City();
@@ -152,7 +152,7 @@ class ImportDataCommand
             $city->setStateId($record['state_id']);
             $city->setStateCode($record['state_code']);
             $city->setStateName($record['state_name']);
-            if ($record['country_id'] !== '') {
+            if ('' !== $record['country_id']) {
                 $city->setCountryId($this->countryRepository->find((int) $record['country_id']));
             }
             $city->setCountryCode($record['country_code']);
@@ -170,7 +170,6 @@ class ImportDataCommand
         $this->manager->clear();
         $io->progressFinish();
 
-
         return Command::SUCCESS;
     }
 
@@ -186,10 +185,10 @@ class ImportDataCommand
 
         foreach ($objects as $obj) {
             // Add braces back
-            $obj = '{' . trim($obj, '{}') . '}';
+            $obj = '{'.trim($obj, '{}').'}';
 
             // Match key:value pairs
-            preg_match_all('/(\w+):([^\s,}]+)/', $obj, $matches, PREG_SET_ORDER);
+            preg_match_all('/(\w+):([^\s,}]+)/', $obj, $matches, \PREG_SET_ORDER);
 
             $assoc = [];
             foreach ($matches as $match) {

@@ -4,20 +4,20 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.5",
-        "doctrine/orm": "^3.5",
+        "doctrine/orm": "^3.5.2",
         "league/csv": "^9.27.0",
-        "pagerfanta/doctrine-orm-adapter": "^4.7",
+        "pagerfanta/doctrine-orm-adapter": "^4.7.2",
         "sylius/bootstrap-admin-ui": "^0.9.1",
         "sylius/ui-translations": "^0.9.1",
         "symfony/asset-mapper": "7.3.*",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
-        "symfony/flex": "^2",
+        "symfony/flex": "^2.8.2",
         "symfony/framework-bundle": "7.3.*",
         "symfony/runtime": "7.3.*",
         "symfony/yaml": "7.3.*"
@@ -75,7 +75,10 @@
         }
     },
     "require-dev": {
-        "rector/rector": "^2.2",
+        "friendsofphp/php-cs-fixer": "^3.89",
+        "phpstan/phpstan": "^2.1.31",
+        "phpstan/phpstan-symfony": "^2.0.8",
+        "rector/rector": "^2.2.3",
         "symfony/maker-bundle": "^1.64"
     }
 }

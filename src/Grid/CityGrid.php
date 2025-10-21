@@ -3,14 +3,15 @@
 namespace App\Grid;
 
 use App\Entity\City;
+use App\Entity\Country;
 use Sylius\Bundle\GridBundle\Builder\Action\CreateAction;
 use Sylius\Bundle\GridBundle\Builder\Action\DeleteAction;
-use Sylius\Bundle\GridBundle\Builder\Action\ShowAction;
 use Sylius\Bundle\GridBundle\Builder\Action\UpdateAction;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\BulkActionGroup;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\ItemActionGroup;
 use Sylius\Bundle\GridBundle\Builder\ActionGroup\MainActionGroup;
 use Sylius\Bundle\GridBundle\Builder\Field\StringField;
+use Sylius\Bundle\GridBundle\Builder\Filter\EntityFilter;
 use Sylius\Bundle\GridBundle\Builder\GridBuilderInterface;
 use Sylius\Bundle\GridBundle\Grid\AbstractGrid;
 use Sylius\Component\Grid\Attribute\AsGrid;
@@ -76,6 +77,10 @@ final class CityGrid extends AbstractGrid
                 BulkActionGroup::create(
                     DeleteAction::create()
                 )
+            )
+            ->addFilter(
+                EntityFilter::create('country_id', Country::class)
+                    ->setLabel('app.ui.country')
             )
         ;
     }
