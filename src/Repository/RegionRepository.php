@@ -5,12 +5,15 @@ namespace App\Repository;
 use App\Entity\Region;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\CreatePaginatorTrait;
 
 /**
  * @extends ServiceEntityRepository<Region>
  */
 class RegionRepository extends ServiceEntityRepository
 {
+    use CreatePaginatorTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Region::class);

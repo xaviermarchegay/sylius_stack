@@ -88,11 +88,9 @@ class Region
 
     public function removeSubRegion(SubRegion $subRegion): static
     {
-        if ($this->subRegions->removeElement($subRegion)) {
-            // set the owning side to null (unless already changed)
-            if ($subRegion->getRegionId() === $this) {
-                $subRegion->setRegionId(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->subRegions->removeElement($subRegion) && $subRegion->getRegionId() === $this) {
+            $subRegion->setRegionId(null);
         }
 
         return $this;
@@ -118,11 +116,9 @@ class Region
 
     public function removeCountry(Country $country): static
     {
-        if ($this->countries->removeElement($country)) {
-            // set the owning side to null (unless already changed)
-            if ($country->getRegionId() === $this) {
-                $country->setRegionId(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->countries->removeElement($country) && $country->getRegionId() === $this) {
+            $country->setRegionId(null);
         }
 
         return $this;

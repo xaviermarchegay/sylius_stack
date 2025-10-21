@@ -44,7 +44,7 @@ class ImportDataCommand
 
         foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
             $region = $this->regionRepository->find((int) $record['id']);
-            if (!$region) {
+            if (!$region instanceof \App\Entity\Region) {
                 $region = new Region();
                 $this->manager->persist($region);
             }
@@ -67,7 +67,7 @@ class ImportDataCommand
 
         foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
             $subregion = $this->subRegionRepository->find((int) $record['id']);
-            if (!$subregion) {
+            if (!$subregion instanceof \App\Entity\SubRegion) {
                 $subregion = new SubRegion();
                 $this->manager->persist($subregion);
             }
@@ -93,7 +93,7 @@ class ImportDataCommand
 
         foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
             $country = $this->countryRepository->find((int) $record['id']);
-            if (!$country) {
+            if (!$country instanceof \App\Entity\Country) {
                 $country = new Country();
                 $this->manager->persist($country);
             }
@@ -143,7 +143,7 @@ class ImportDataCommand
 
         foreach ($csv->sorted(fn($a, $b) => (int)$a['id'] <=> (int)$b['id'])->getRecords() as $record) {
             $city = $this->cityRepository->find((int) $record['id']);
-            if (!$city) {
+            if (!$city instanceof \App\Entity\City) {
                 $city = new City();
                 $this->manager->persist($city);
             }

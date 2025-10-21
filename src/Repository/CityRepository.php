@@ -5,12 +5,15 @@ namespace App\Repository;
 use App\Entity\City;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\CreatePaginatorTrait;
 
 /**
  * @extends ServiceEntityRepository<City>
  */
 class CityRepository extends ServiceEntityRepository
 {
+    use CreatePaginatorTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, City::class);

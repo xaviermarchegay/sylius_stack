@@ -97,11 +97,9 @@ class SubRegion
 
     public function removeCountry(Country $country): static
     {
-        if ($this->countries->removeElement($country)) {
-            // set the owning side to null (unless already changed)
-            if ($country->getSubregionId() === $this) {
-                $country->setSubregionId(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->countries->removeElement($country) && $country->getSubregionId() === $this) {
+            $country->setSubregionId(null);
         }
 
         return $this;
