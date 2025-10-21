@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\AsDecorator;
 final readonly class MenuBuilder implements MenuBuilderInterface
 {
     public function __construct(
-        private readonly FactoryInterface $factory,
+        private FactoryInterface $factory,
     ) {
     }
 
